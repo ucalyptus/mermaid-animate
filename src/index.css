@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mermaid-preview svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.flowchart-link {
+  stroke-dasharray: 5 !important;
+  animation: flowAnimation 1s linear infinite !important;
+  stroke-width: 2px !important;
+}
+
+@keyframes flowAnimation {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.node rect,
+.node circle,
+.node ellipse,
+.node polygon,
+.node path {
+  transition: all 0.3s ease-in-out;
+}
+
+.node:hover rect,
+.node:hover circle,
+.node:hover ellipse,
+.node:hover polygon,
+.node:hover path {
+  filter: brightness(0.95);
+  transform: scale(1.02);
+}
+
+.edgeLabel {
+  transition: all 0.3s ease-in-out;
+}
+
+.edgeLabel:hover {
+  transform: scale(1.1);
+}
