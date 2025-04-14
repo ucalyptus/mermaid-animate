@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import mermaid from 'mermaid';
 import { FileCode2, Play, RefreshCw, Download } from 'lucide-react';
 import { toPng } from 'html-to-image';
@@ -27,7 +27,7 @@ function App() {
   const [isExporting, setIsExporting] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const renderDiagram = async (code: string) => {
+  const renderDiagram = useCallback(async (code: string) => {
     try {
       setIsLoading(true);
       setError('');
@@ -40,7 +40,7 @@ function App() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const exportToGif = async () => {
     if (!previewRef.current) return;
@@ -104,19 +104,24 @@ function App() {
     }
   };
 
+  // Initialize mermaid once
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: true,
       theme: 'default',
       securityLevel: 'loose',
     });
-    renderDiagram(mermaidCode);
 
     // Cleanup worker URL
     return () => {
       URL.revokeObjectURL(gifWorkerUrl);
     };
   }, []);
+
+  // Render diagram whenever code changes
+  useEffect(() => {
+    renderDiagram(mermaidCode);
+  }, [mermaidCode, renderDiagram]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
